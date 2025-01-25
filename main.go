@@ -41,15 +41,44 @@ func getBet(balance uint) uint{
 }// end getBalance
 
 
+//complex logic
+// A - very rare
+// B - rare
+// C - least rare
+// D - normal
 
-
-
-
+func generateSymbolsArray(symbols map[string]uint) []string{
+	
+	symbolsArr := []string{}
+	for symbols, count := range symbols {
+		for i := uint(0); i < (count); i++{
+			symbolsArr = append(symbolsArr, symbols)
+		}
+	}
+	return symbolsArr
+}
 
 func main(){
 
+	symbols := map[string]uint{
+		"A" : 3,
+		"B" : 6,
+		"C" : 11,
+		"D" : 25,
+	}
+	// what money you will win with your bet
+	/*
+	multipliers := map[string] uint{
+
+		"A" : 30,
+		"B" : 15,
+		"C" : 7,
+		"D" : 2,
+	}
+	*/
+	symbolsArr := generateSymbolsArray(symbols)
+	fmt.Println(symbolsArr)
 	balance := uint(200)
-	
 	getName()
 
 	for balance > 0{
