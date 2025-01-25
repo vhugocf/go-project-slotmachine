@@ -1,8 +1,8 @@
 package main
 
-import(
-
+import (
 	"fmt"
+	"math/rand"
 )
 
 func getName() string {
@@ -58,13 +58,47 @@ func generateSymbolsArray(symbols map[string]uint) []string{
 	return symbolsArr
 }
 
+//generate a randon number
+func getRandonNumber(min int, max int) int {
+	randonNumber := rand.Intn(max - min  + 1) + min
+	return randonNumber
+}
+
+
+func getSpin(reel []string, rows int, cols int) [][]string {
+	result := [][]string{}
+
+	for i := 0; i < rows; i++{
+		result = append(result, []string{})
+	}
+
+	for col := 0; col < cols; col++{
+		selected := map[int]bool{}
+		for row := 0; row < rows; row++{
+			for true {
+				randonIndex := getRandonNumber(0, len(reel)-1)
+				_, exist := selected[randonIndex]
+				if !exist{
+					selected[randonIndex] = true
+					result[row] = append(result[row], reel[randonIndex])
+					break
+				}
+			}
+		}
+	}
+	return result
+}
+
+
+
+
 func main(){
 
 	symbols := map[string]uint{
-		"A" : 3,
-		"B" : 6,
-		"C" : 11,
-		"D" : 25,
+		"A" : 2,
+		"B" : 10,
+		"C" : 16,
+		"D" : 31,
 	}
 	// what money you will win with your bet
 	/*
@@ -77,7 +111,11 @@ func main(){
 	}
 	*/
 	symbolsArr := generateSymbolsArray(symbols)
-	fmt.Println(symbolsArr)
+	spin := getSpin(symbolsArr, 3,3)
+
+	fmt.Println(spin)
+	
+	
 	balance := uint(200)
 	getName()
 
