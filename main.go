@@ -18,21 +18,38 @@ func getName() string {
 	if err != nil{
 		return ""
 	}
+
 	fmt.Printf("Welcome %s, let's play the game by the rules!\n", name)
 	return name
-	
-
-
-
-
 }
+
+func getBet(balance uint) uint{
+	var bet uint
+	// while in go
+	for true{
+		fmt.Printf("Enter your bet, or type '0' to quit this game (your balance =$%d): ", balance)
+		fmt.Scan(&bet)
+
+		if bet > balance {
+			fmt.Println("Bet cannot be larger than balance.")
+		} else {
+			break
+		}
+	}// end bet
+	return bet
+
+}// end getBalance
 
 
 
 
 func main(){
 
+	balance := 200
+	
 	getName()
+	bet := getBet(uint(balance))
+	fmt.Println(bet)
 	
 
 
