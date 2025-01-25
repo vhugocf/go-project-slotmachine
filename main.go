@@ -45,12 +45,25 @@ func getBet(balance uint) uint{
 
 func main(){
 
-	balance := 200
+	balance := uint(200)
 	
 	getName()
-	bet := getBet(uint(balance))
-	fmt.Println(bet)
-	
 
-
+	for balance > 0{
+		bet := getBet(balance)
+		if bet == 0 {
+			break
+		}
+		balance = balance - bet
+	}
+	fmt.Printf("Your left with, $%d\n", balance)
 }
+
+
+
+
+
+
+
+
+
