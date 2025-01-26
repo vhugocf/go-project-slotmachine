@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math/rand"
+
+	//"golang.org/x/text/unicode/rangetable"
 )
 
 func getName() string {
@@ -11,7 +13,7 @@ func getName() string {
 	//var name string
 
 	
-	fmt.Println("Welcome to Victor Casino")
+	fmt.Println("Welcome to Victor's Casino")
 	fmt.Printf("Type your name: ")
 	_, err := fmt.Scanln(&name)
 
@@ -90,6 +92,42 @@ func getSpin(reel []string, rows int, cols int) [][]string {
 }
 
 
+func printSpin(spin [][]string){
+	for _, row := range spin{
+		for j, symbol := range row {
+			fmt.Printf(symbol)
+			if j != len(row) - 1{
+				fmt.Printf(" | ")
+			}
+		}
+		fmt.Println()
+	}
+}
+
+
+func checkWin(spin [][]string, multipliers map[string]uint) []uint {
+	lines := []uint{}
+
+	for _, row := range spin{
+		win := true
+		checkSymbol := row[0]
+
+		for _, symbol := range row[1:]{
+			if checkSymbol != symbol {
+				win = false
+				break
+			}
+		}
+		if win {
+			lines = append(lines, multipliers[checkSymbol])
+		}else {
+			lines = append(lines, 0)
+		}
+	
+	}
+	return lines
+}
+
 
 
 func main(){
@@ -101,7 +139,7 @@ func main(){
 		"D" : 31,
 	}
 	// what money you will win with your bet
-	/*
+
 	multipliers := map[string] uint{
 
 		"A" : 30,
@@ -109,25 +147,44 @@ func main(){
 		"C" : 7,
 		"D" : 2,
 	}
-	*/
-	symbolsArr := generateSymbolsArray(symbols)
-	spin := getSpin(symbolsArr, 3,3)
 
-	fmt.Println(spin)
+	symbolsArr := generateSymbolsArray(symbols)
 	
+
 	
 	balance := uint(200)
 	getName()
 
-	for balance > 0{
+	for balance > 0 {
 		bet := getBet(balance)
 		if bet == 0 {
 			break
 		}
+
+
 		balance = balance - bet
-	}
-	fmt.Printf("Your left with, $%d.\n", balance)
-}
+		spin := getSpin(symbolsArr, 3,3)
+		printSpin(spin)
+		
+		//here we check if you win and check balance
+		winningLines := checkWin(spin, multipliers)
+
+		for i, multi := range winningLines{
+			win := multi * bet
+			balance = balance + win
+			if multi > 0 {
+				fmt.Printf("Won $%d, (%dx) on Line #%d\n", win, multi, i + 1)
+			}
+			}
+		}
+		fmt.Printf("Your left with, $%d.\n", balance)
+
+
+
+	}// end main
+
+
+
 
 
 
